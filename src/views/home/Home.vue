@@ -72,6 +72,10 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
+    this.$bus.$on('itemImgLoad',()=>{
+      console.log('------');
+      this.$refs.scroll.scroll.refresh()
+    })
   },
   methods: {
     // 事件监听相关

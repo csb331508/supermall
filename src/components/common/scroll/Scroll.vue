@@ -43,6 +43,7 @@ export default {
       //  console.log(position);
       this.$emit("scroll", position);
     });
+    console.log(this.scroll);
 
     // 上拉加载更多
     this.scroll.on("pullingUp", () => {
@@ -62,6 +63,9 @@ export default {
     // 封装finishpullup函数
     finishPullUp(){
       this.scroll.finishPullUp()
+    },
+    refresh(){
+      this.scroll.refresh()
     }
   },
 };
