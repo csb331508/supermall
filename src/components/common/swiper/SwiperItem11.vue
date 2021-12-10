@@ -10,7 +10,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .swiper-item{
   width: 375px;
   /* position: absolute; */

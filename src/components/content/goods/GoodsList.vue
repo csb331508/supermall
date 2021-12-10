@@ -25,7 +25,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .goods{
     display: flex;
     width: 100vm;
