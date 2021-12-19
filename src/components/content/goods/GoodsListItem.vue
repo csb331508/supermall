@@ -29,6 +29,7 @@ export default {
   },
   methods:{
     imgLoad(){
+      // console.log('--------');
       this.$bus.$emit('itemImgLoad')
     }
   }

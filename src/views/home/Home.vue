@@ -8,8 +8,8 @@
       ref="scroll"
       :probe-type="3"
       :pull-up-load="true"
-      @pulling-up = "loadMore"
       @scroll="contentScroll"
+      @pullingUp ="loadMore"
     >
       <home-swiper :banners="banners" class="home-swiper"> </home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
@@ -36,7 +36,7 @@ import RecommendView from "./childComps/RecommendView.vue";
 import FeatureView from "./childComps/FeatureView.vue";
 import { getHomeMultidata, getHomeGoods } from "network/home";
 import Scroll from "../../components/common/scroll/Scroll.vue";
-
+import {debounce} from 'common/utils.js'
 export default {
   name: "Home",
   components: {
@@ -72,12 +72,18 @@ export default {
     this.getHomeGoods("pop");
     this.getHomeGoods("new");
     this.getHomeGoods("sell");
-    this.$bus.$on('itemImgLoad',()=>{
-      console.log('------');
-      this.$refs.scroll.scroll.refresh()
-    })
+  },
+  mounted() {
+    const refresh = debounce(this.$refs.scroll.refresh,200)
+    this.$bus.$on("itemImgLoad", () => {
+      
+      refresh()
+    
+    });
   },
   methods: {
+      
+   
     // 事件监听相关
     tabclick(index) {
       // console.log(index);
@@ -96,7 +102,7 @@ export default {
           break;
       }
     },
-    // 上拉加载更多
+    // 下拉加载更多
     loadMore(){
       console.log('more');
       this.getHomeGoods(this.currentType);
@@ -110,8 +116,8 @@ export default {
     // 显示隐藏顶部按钮
     contentScroll(position) {
       // console.log(position);
-      this.isBackshow = (-(position.y) > 500);
-     
+      this.isBackshow = -position.y > 500;
+
       // console.log(this.$$refs.scroll.test);
     },
 
@@ -136,8 +142,8 @@ export default {
         // console.log(res.data.list);
         // console.log(res.data[type].list);
         this.goods[type].list.push(...res.data.list);
-        this.goods[type].page = page;
-        // this.$refs.scroll.finishPullUp;
+        this.goods[type].page +=1;
+        this.$refs.scroll.finishPullUp();
       });
     },
   },
