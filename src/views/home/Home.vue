@@ -3,6 +3,14 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
+    <tab-control
+        :titles="['流行', '新款', '精选']"
+        ref="tabControl1"
+        @tabclick="tabclick"
+        v-show="true"
+        class="tabcontrol"
+      >
+    </tab-control>
     <scroll
       class="wrapper"
       ref="scroll"
@@ -11,12 +19,12 @@
       @scroll="contentScroll"
       @pullingUp ="loadMore"
     >
-      <home-swiper :banners="banners" class="home-swiper"> </home-swiper>
+      <home-swiper :banners="banners" class="home-swiper" @swiperImageLoad ="swiperImageLoad"> </home-swiper>
       <recommend-view :recommends="recommends"></recommend-view>
       <feature-view></feature-view>
       <tab-control
         :titles="['流行', '新款', '精选']"
-        class="tab-control"
+        ref="tabControl2"
         @tabclick="tabclick"
       ></tab-control>
       <goods-list :goods="showGoods"></goods-list>
@@ -65,6 +73,8 @@ export default {
       },
       currentType: "pop",
       isBackshow: false,
+      isFixed:false,
+      tabControlOffsetTop:0
     };
   },
   created() {
@@ -80,6 +90,9 @@ export default {
       refresh()
     
     });
+  },
+  destoryed(){
+    console.log(destoryed);
   },
   methods: {
       
@@ -101,6 +114,14 @@ export default {
 
           break;
       }
+      this.$refs.TabControl.currentIndex = index;
+      this.$refs.TabContro2.currentIndex = index;
+    },
+    swiperImageLoad(){
+      // console.log(this.$refs.tabControl.$el.offsetTop);
+      this.tabControlOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      console.log(this.tabControlOffsetTop );
+      
     },
     // 下拉加载更多
     loadMore(){
@@ -115,9 +136,13 @@ export default {
     },
     // 显示隐藏顶部按钮
     contentScroll(position) {
-      // console.log(position);
-      this.isBackshow = -position.y > 500;
-
+      console.log(this.$refs.scroll.scroll.y);
+      // this.isBackshow = (-position.y )> 1000;
+      // // this.tabControlOffsetTop = this.$refs.tabControl.$el.offsetTop
+      // if((-position.y )<this.tabControlOffsetTop){
+      //   console.log('111');
+      //   isFixed = true
+      
       // console.log(this.$$refs.scroll.test);
     },
 
@@ -169,7 +194,7 @@ export default {
 .home-nav {
   background-color: var(--color-tint);
   color: white;
-  position: fixed;
+  position:fixed;
   left: 0;
   top: 0;
   right: 0;
@@ -177,7 +202,14 @@ export default {
 }
 
 .tab-control {
-  position: sticky;
+  /* position: sticky; */
   top: 44px;
+}
+.tabcontrol{
+  /* display: flex; */
+  width: 100%;
+  position:fixed;
+  top: 44px;
+  z-index: 9;
 }
 </style>

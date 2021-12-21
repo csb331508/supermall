@@ -40,13 +40,13 @@ export default {
     });
 
     // console.log(this.scroll);
-    if (this.probeType === 2 || this.probeType === 3) {
+    // if (this.probeType === 2 || this.probeType === 3) {
       // 监听滚动的位置
       this.scroll.on("scroll", (position) => {
         //  console.log(position);
         this.$emit("scroll", position);
       });
-    }
+    // }
     // 下拉加载更多
     if (this.pullUpLoad) {
       this.scroll.on("pullingUp", () => {
